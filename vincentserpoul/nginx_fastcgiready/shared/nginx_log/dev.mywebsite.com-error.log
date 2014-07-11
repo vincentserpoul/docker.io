@@ -1,0 +1,2 @@
+2014/07/10 08:08:54 [error] 12#0: *3 open() "/var/www/dev.mywebsite.com/favicon.ico" failed (2: No such file or directory), client: 172.17.8.1, server: dev.mywebsite.com, request: "GET /favicon.ico HTTP/1.1", host: "dev.mywebsite.com"
+2014/07/10 11:21:32 [error] 15#0: *2 open() "/var/www/dev.mywebsite.com/favicon.ico" failed (2: No such file or directory), client: 172.17.8.1, server: dev.mywebsite.com, request: "GET /favicon.ico HTTP/1.1", host: "dev.mywebsite.com"

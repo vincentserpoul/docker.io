@@ -1,4 +1,4 @@
-# VERSION: nginx-1.7.2
+# VERSION: nginx-1.7.3
 
 FROM ubuntu:14.04
 
@@ -27,7 +27,7 @@ RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2
 ENV PCRE_VERSION 8.35
 ENV ZLIB_VERSION 1.2.8
 ENV OPENSSL_VERSION 1.0.1h
-ENV NGINX_VERSION 1.7.2
+ENV NGINX_VERSION 1.7.3
 ENV HDR_MORE_MOD_VERSION 0.25
 ENV DAV_EXT_VERSION 0.0.3
 ENV PSOL_VERSION 1.8.31.4

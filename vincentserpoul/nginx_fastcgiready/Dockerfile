@@ -2,9 +2,6 @@ FROM vincentserpoul/nginx:latest
 
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-# Fastcgi config (works for phpfpm and hhvm)
-ADD etc/nginx/fastcgi.conf /etc/nginx/
-
 # Add certificates for ssl
 RUN mkdir -p /etc/ssl
 ADD etc/ssl/dev.mywebsite.com.key /etc/ssl/

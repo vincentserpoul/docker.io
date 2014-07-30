@@ -17,7 +17,6 @@ server {
     error_log  /var/log/nginx/dev.mywebsite.com-error.log error;
 
     server_name dev.mywebsite.com;
-    include /etc/nginx/fastcgi.conf;
 
     ## allow for html source of super high volume product pages to be put in "static" directory and served without php
     if ($http_host ~ "^(.*)mywebsite.com"){
@@ -37,9 +36,12 @@ server {
     }
 
     ## Images and static content is treated different
-    location ~* ^.+.(jpg|jpeg|gif|css|png|js|ico)$ {
+    location ~* ^.+.(js|css|png|jpg|jpeg|gif|ico|woff|ttf|svg|otf)$ {
             access_log        off;
             root /var/www/dev.mywebsite.com/;
+            expires 30d;
+            add_header Pragma public;
+            add_header Cache-Control "public";
     }
 
     location / {

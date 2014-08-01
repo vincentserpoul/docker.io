@@ -72,7 +72,7 @@ server {
         if (!-e $request_filename) { rewrite / /index.php last; } ## Catch 404s that try_files miss
 
         expires        off; ## Do not cache dynamic content
-        fastcgi_pass   127.0.0.1:9000;
+        fastcgi_pass   fastcgi_server:9000;
         fastcgi_buffer_size 128k;
         fastcgi_buffers 4 256k;
         fastcgi_busy_buffers_size 256k;

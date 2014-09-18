@@ -9,8 +9,9 @@ ADD etc/ssl/certs/dev.mywebsite.com.crt /etc/ssl/certs/
 RUN chmod 400 /etc/ssl/dev.mywebsite.com.key
 
 # Add config for the new test ssl website (that will be shared through volumes with the fastcgi server)
-ADD etc/nginx/sites-available/dev.mywebsite.com /etc/nginx/sites-available/
-RUN sudo ln -s /etc/nginx/sites-available/dev.mywebsite.com /etc/nginx/sites-enabled/dev.mywebsite.com
+ADD etc/nginx/conf.d /etc/nginx/conf.d
+ADD etc/nginx/sites-available /etc/nginx/sites-available
+RUN sudo ln -s /etc/nginx/sites-available/* /etc/nginx/sites-enabled
 
 # Expose the ssl port
 EXPOSE 443

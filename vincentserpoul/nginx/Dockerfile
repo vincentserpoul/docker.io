@@ -123,6 +123,7 @@ RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 EXPOSE 80
 
 # adding websites folder
+ADD etc/nginx/conf.d /etc/nginx/conf.d
 ADD etc/nginx/sites-available/default /etc/nginx/sites-available/
 RUN sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 

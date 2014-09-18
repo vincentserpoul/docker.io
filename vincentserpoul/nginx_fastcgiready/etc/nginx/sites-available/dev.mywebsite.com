@@ -79,6 +79,13 @@ server {
         fastcgi_read_timeout 300;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params; ## See /etc/nginx/fastcgi_params
+        fastcgi_param GEOIP_REGION $geoip_region;
+        fastcgi_param GEOIP_REGION_NAME $geoip_region_name;
+        fastcgi_param GEOIP_CITY $geoip_city;
+        fastcgi_param GEOIP_AREA_CODE $geoip_area_code;
+        fastcgi_param GEOIP_LATITUDE $geoip_latitude;
+        fastcgi_param GEOIP_LONGITUDE $geoip_longitude;
+        fastcgi_param GEOIP_POSTAL_CODE $geoip_postal_code;
     }
 
 }

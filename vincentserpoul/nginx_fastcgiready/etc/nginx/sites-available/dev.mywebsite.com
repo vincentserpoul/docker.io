@@ -76,7 +76,7 @@ server {
         fastcgi_buffer_size 128k;
         fastcgi_buffers 4 256k;
         fastcgi_busy_buffers_size 256k;
-        fastcgi_read_timeout 120;
+        fastcgi_read_timeout 300;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params; ## See /etc/nginx/fastcgi_params
     }

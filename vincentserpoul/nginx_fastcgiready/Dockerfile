@@ -1,4 +1,4 @@
-FROM vincentserpoul/nginx:latest
+FROM vincentserpoul/nginx
 
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
@@ -10,8 +10,8 @@ RUN chmod 400 /etc/ssl/dev.mywebsite.com.key
 
 # Add config for the new test ssl website (that will be shared through volumes with the fastcgi server)
 ADD etc/nginx/conf.d /etc/nginx/conf.d
-ADD etc/nginx/sites-available /etc/nginx/sites-available
-RUN sudo ln -s /etc/nginx/sites-available/* /etc/nginx/sites-enabled
+ADD etc/nginx/sites-available/dev.mywebsite.com /etc/nginx/sites-available/dev.mywebsite.com
+RUN sudo ln -s /etc/nginx/sites-available/dev.mywebsite.com /etc/nginx/sites-enabled/dev.mywebsite.com
 
 # Expose the ssl port
 EXPOSE 443

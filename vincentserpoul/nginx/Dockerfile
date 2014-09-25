@@ -132,11 +132,11 @@ RUN sudo ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/defau
 RUN mkdir -p /var/ngx_pagespeed_cache
 
 # make the website accessible
-ADD var/www /var/www
+ADD etc/nginx/html /etc/nginx/html
 
 # Set default container command
 ENTRYPOINT  ["service", "nginx", "start"]
 
 # docker build -t vincentserpoul/nginx .
 # docker stop mynginx;docker rm mynginx;
-# docker stop mynginx;docker rm mynginx;docker run --name mynginx -i -t -p 80:80 -v /home/core/docker.io/vincentserpoul/docker_nginx/shared/nginx_log:/var/log/nginx -v /home/core/www:/var/www --link myphpfpm:fastcgi_server  -d vincentserpoul/nginx
+# docker stop mynginx;docker rm mynginx;docker run --name mynginx -i -t -p 80:80 -v /home/core/docker.io/vincentserpoul/nginx/shared/nginx_log:/var/log/nginx -v /home/core/www:/var/www  -d vincentserpoul/nginx

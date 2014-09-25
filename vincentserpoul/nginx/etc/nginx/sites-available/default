@@ -1,24 +1,18 @@
 server {
+        listen 80 default_server;
+        listen [::]:80 default_server ipv6only=on;
 
-    root /var/www/default;
-    index index.html index.htm;
+        root /etc/nginx/html;
+        index index.html;
 
-    # Make site accessible from http://localhost/
-    server_name localhost;
+        # Make site accessible from http://localhost/
+        server_name localhost;
 
-    location / {
-    # First attempt to serve request as file, then
-    # as directory, then fall back to index.html
-    try_files $uri $uri/ /index.html;
-    # Uncomment to enable naxsi on this location
-    # include /etc/nginx/naxsi.rules
-    }
-
-    location /doc/ {
-    alias /usr/share/doc/;
-    autoindex on;
-    allow 127.0.0.1;
-    deny all;
-    }
-
+        location / {
+                # First attempt to serve request as file, then
+                # as directory, then fall back to displaying a 404.
+                try_files $uri $uri/ /index.html;
+                # Uncomment to enable naxsi on this location
+                # include /etc/nginx/naxsi.rules
+        }
 }

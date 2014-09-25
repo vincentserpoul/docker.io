@@ -10,7 +10,7 @@ server {
     ssl_ciphers               AES128-GCM-SHA256:ECDHE-RSA-AES128-SHA256:RC4:HIGH:!MD5:!aNULL:!EDH;
     ssl_prefer_server_ciphers on;
 
-    root /var/www/dev.mywebsite.com;
+    root /var/demo/dev.mywebsite.com;
     index index.html index.htm index.hh index.php;
 
     access_log /var/log/nginx/dev.mywebsite.com-access.log;
@@ -38,7 +38,7 @@ server {
     ## Images and static content is treated different
     location ~* ^.+.(js|css|png|jpg|jpeg|gif|ico|woff|ttf|svg|otf)$ {
             access_log        off;
-            root /var/www/dev.mywebsite.com/;
+            root /var/demo/dev.mywebsite.com/;
             expires 30d;
             add_header Pragma public;
             add_header Cache-Control "public";

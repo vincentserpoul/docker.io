@@ -16,6 +16,7 @@ RUN sudo ln -s /etc/nginx/sites-available/dev.mywebsite.com /etc/nginx/sites-ena
 # Expose the ssl port
 EXPOSE 443
 
-# docker build -t vincentserpoul/nginx_fastcgiready .
-# docker stop mynginx_fastcgiready;docker rm mynginx_fastcgiready; docker run --name mynginx_fastcgiready -i -t -p 443:443  --volumes-from myphpfpm_53 -v /home/core/docker.io/vincentserpoul/nginx_fastcgiready/shared/nginx_log:/var/log/nginx --link myphpfpm_53:fastcgi_server  -d vincentserpoul/nginx_fastcgiready
+# docker build -t vincentserpoul/nginx_fastcgiready docker.io/vincentserpoul/nginx_fastcgiready/
+# docker stop mynginx_fastcgiready;docker rm mynginx_fastcgiready;
+# docker run --name mynginx_fastcgiready -i -t -p 443:443  --volumes-from myphpfpm_53 --link myphpfpm_53:fastcgi_server  -d vincentserpoul/nginx_fastcgiready
 

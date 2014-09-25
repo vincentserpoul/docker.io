@@ -28,13 +28,15 @@ ADD etc/php5/fpm/pool.d/www.conf /etc/php5/fpm/pool.d/www.conf
 
 # Expose the default port
 EXPOSE 9000
+RUN mkdir -p /var/log/php-fpm
 
 # Add volume so that it is accessible from outside the container to the fastcgi container
-ADD var/www /var/www
+ADD var/demo /var/demo
 VOLUME ["/var/www"]
+VOLUME ["/var/demo"]
 
 # Set default container command
 ENTRYPOINT  ["service", "php5-fpm", "start"]
 
-# docker build -t vincentserpoul/phpfpm_53 .
-# docker stop myphpfpm_53;docker rm myphpfpm_53;docker run --name myphpfpm_53 -i -t -p 9000:9000 -v ~/docker.io/vincentserpoul/phpfpm_53/shared/php-fpm_log:/var/log/php-fpm -d vincentserpoul/phpfpm_53
+# docker build -t vincentserpoul/phpfpm_53 docker.io/vincentserpoul/phpfpm_53
+# docker stop myphpfpm_53;docker rm myphpfpm_53;docker run --name myphpfpm_53 -dit -p 9000:9000 vincentserpoul/phpfpm_53

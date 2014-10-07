@@ -1,11 +1,31 @@
-# VERSION: HHVM
-
 FROM ubuntu:14.04
 
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-# HHVM Fastcgi
-RUN sudo apt-get -y install hhvm
+
+# Set the env variable DEBIAN_FRONTEND to noninteractive
+ENV DEBIAN_FRONTEND noninteractive
+
+# Fix locales
+RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+
+# Set correct environment variables.
+ENV HOME /root
+
+# Run upgrades
+RUN echo udev hold | dpkg --set-selections && \
+echo initscripts hold | dpkg --set-selections &&\
+echo upstart hold | dpkg --set-selections &&\
+apt-get update -q &&\
+apt-get -y upgrade
+
+# Prerequisites
+RUN apt-get install -y wget vim
+
+RUN sudo wget -O - http://dl.hhvm.com/conf/hhvm.gpg.key | sudo apt-key add - &&\
+    echo deb http://dl.hhvm.com/ubuntu trusty main | sudo tee /etc/apt/sources.list.d/hhvm.list &&\
+    sudo apt-get update &&\
+    sudo apt-get -y install libgmp-dev libmemcached-dev hhvm
 
 RUN sudo /usr/share/hhvm/install_fastcgi.sh
 RUN sudo update-rc.d hhvm defaults
@@ -23,4 +43,4 @@ ENTRYPOINT  ["service", "hhvm", "start"]
 # docker build -t vincentserpoul/hhvm .
 
 # docker stop myhhvm;docker rm myhhvm;
-# docker stop myhhvm;docker rm myhhvm;docker run --name myhhvm -i -t -p 9000:9000 -v /home/core/docker.io/vincentserpoul/docker_hhvm/shared/hhvm_log:/var/log/hhvm -v /home/core/www:/var/www --link mymariadb:db --link myredis:redis -d vincentserpoul/phpfpm
+# docker stop myhhvm;docker rm myhhvm;docker run --name myhhvm -dit -p 9000:9000  -v /home/core/www:/var/www  vincentserpoul/hhvm

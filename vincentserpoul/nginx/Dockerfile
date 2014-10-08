@@ -135,6 +135,9 @@ RUN mkdir -p /var/ngx_pagespeed_cache &&\
 # make the website accessible
 ADD etc/nginx/html /etc/nginx/html
 
+# log format
+ADD etc/nginx/conf.d/timed_combined_log.conf /etc/nginx/conf.d/timed_combined_log.conf
+
 # Set default container command
 ENTRYPOINT  ["service", "nginx", "start"]
 

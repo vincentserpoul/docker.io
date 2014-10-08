@@ -13,7 +13,7 @@ server {
     root /var/demo/dev.mywebsite.com;
     index index.html index.htm index.hh index.php;
 
-    access_log /var/log/nginx/dev.mywebsite.com-access.log;
+    access_log /var/log/nginx/dev.mywebsite.com-access.log timed_combined;
     error_log  /var/log/nginx/dev.mywebsite.com-error.log error;
 
     server_name dev.mywebsite.com;

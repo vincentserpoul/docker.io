@@ -8,6 +8,9 @@ server {
         # Make site accessible from http://localhost/
         server_name localhost;
 
+        access_log /var/log/nginx/default-access.log timed_combined;
+        error_log  /var/log/nginx/default-error.log error;
+
         location / {
                 # First attempt to serve request as file, then
                 # as directory, then fall back to displaying a 404.

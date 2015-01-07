@@ -136,7 +136,7 @@ RUN mkdir -p /var/ngx_pagespeed_cache &&\
 ADD etc/nginx/html /etc/nginx/html
 
 # log format
-ADD etc/nginx/conf.d/timed_combined_log.conf /etc/nginx/conf.d/timed_combined_log.conf
+ADD etc/nginx/conf.d/* /etc/nginx/conf.d/
 
 # Set default container command
 ENTRYPOINT  ["service", "nginx", "start"]

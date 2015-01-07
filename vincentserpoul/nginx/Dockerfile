@@ -144,3 +144,11 @@ ENTRYPOINT  ["service", "nginx", "start"]
 # docker build -t vincentserpoul/nginx docker.io/vincentserpoul/nginx
 # docker stop mynginx;docker rm mynginx;
 # docker run --name mynginx -i -t -p 80:80 -v /home/core/www:/var/www  -d vincentserpoul/nginx
+
+# docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
+# docker ps --all | grep -v vincentserpoul | grep -v busybox | grep -v localhost | grep -v ppdg |  awk '{print $1}' | xargs docker rm
+# docker images --no-trunc | grep none | awk '{print $3}' | xargs docker rmi
+# docker run vincentserpoul/nginx_builder cat /rootfs.tar > ~/docker.io/vincentserpoul/nano_nginx/rootfs.tar
+# docker stop mynanonginx;docker rm mynanonginx;docker build -t vincentserpoul/nano_nginx ./docker.io/vincentserpoul/nano_nginx/
+# docker run -dit --name mynanonginx -p 80:80 -v /home/core/www:/var/www vincentserpoul/nano_nginx
+# sudo ./docker-enter mynanonginx

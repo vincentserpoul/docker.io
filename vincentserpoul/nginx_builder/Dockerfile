@@ -140,5 +140,4 @@ CMD /bin/bash
 
 # docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
 # docker run vincentserpoul/nginx_builder cat /rootfs.tar > rootfs.tar
-# ADD rootfs.tar /
 

@@ -27,7 +27,7 @@ RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2
 # Download nginx
 ENV PCRE_VERSION 8.35
 ENV ZLIB_VERSION 1.2.8
-ENV OPENSSL_VERSION 1.0.1j
+ENV OPENSSL_VERSION 1.0.1k
 ENV NGINX_VERSION 1.7.9
 ENV HDR_MORE_MOD_VERSION 0.25
 ENV DAV_EXT_VERSION 0.0.3

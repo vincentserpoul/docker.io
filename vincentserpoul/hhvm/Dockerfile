@@ -40,7 +40,7 @@ EXPOSE 9000
 # Set default container command
 ENTRYPOINT  ["service", "hhvm", "start"]
 
-# docker build -t vincentserpoul/hhvm .
+# docker build -t vincentserpoul/hhvm docker.io/vincentserpoul/hhvm
 
 # docker stop myhhvm;docker rm myhhvm;
 # docker stop myhhvm;docker rm myhhvm;docker run --name myhhvm -dit -p 9000:9000  -v /home/core/www:/var/www  vincentserpoul/hhvm

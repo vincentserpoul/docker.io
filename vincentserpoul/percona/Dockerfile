@@ -44,7 +44,7 @@ VOLUME  ["/etc/mysql", "/var/lib/mysql"]
 EXPOSE 3306
 CMD ["/run.sh"]
 
-# docker build -t vincentserpoul/percona .
+# docker build -t vincentserpoul/percona docker.io/vincentserpoul/percona/
 # docker stop mysql_datastore;docker rm mysql_datastore;
 # storage : docker run -d -v /var/lib/mysql --name mysql_datastore -p 23:23 busybox
 # docker stop mypercona;docker rm mypercona;docker run -i -t --volumes-from mysql_datastore --name="mypercona" -p 3306:3306 -e PERCONA_PASS="password" -d vincentserpoul/percona

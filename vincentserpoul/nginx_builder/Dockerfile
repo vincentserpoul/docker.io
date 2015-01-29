@@ -25,13 +25,13 @@ RUN echo udev hold | dpkg --set-selections && \
 RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2-xpm-dev libgeoip1 libgeoip-dev libpam0g libssl1.0.0 libxml2 libperl-dev perl perl-base
 
 # Download nginx
-ENV PCRE_VERSION 8.35
+ENV PCRE_VERSION 8.36
 ENV ZLIB_VERSION 1.2.8
-ENV OPENSSL_VERSION 1.0.1k
+ENV OPENSSL_VERSION 1.0.2
 ENV NGINX_VERSION 1.7.9
 ENV HDR_MORE_MOD_VERSION 0.25
 ENV DAV_EXT_VERSION 0.0.3
-ENV PSOL_VERSION 1.9.32.2
+ENV PSOL_VERSION 1.9.32.3
 ENV HTTP_SUB_FILTER_VERSION 0.6.4
 
 WORKDIR /usr/src

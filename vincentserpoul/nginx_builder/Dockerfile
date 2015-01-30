@@ -132,7 +132,7 @@ RUN cp /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 lib
 ADD etc/nginx /rootfs/etc/nginx
 RUN mkdir /rootfs/etc/nginx/sites-enabled
 RUN bash -c "mkdir -p /rootfs/var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}"
-RUN mkdir /rootfs/www && bash -c "mkdir -p /rootfs/www/{empty,default}" && mv /rootfs/opt/nginx/html/* /rootfs/www/default && rm -Rf /rootfs/opt/nginx && chown -R nobody:nogroup /rootfs/www
+RUN mkdir /rootfs/var/www && bash -c "mkdir -p /rootfs/var/www/{empty,default}" && mv /rootfs/opt/nginx/html/* /rootfs/var/www/default && rm -Rf /rootfs/opt/nginx && chown -R nobody:nogroup /rootfs/var/www
 RUN tar cf /rootfs.tar .
 RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /rootfs.tar -C/ ./dev/$X ; done
 

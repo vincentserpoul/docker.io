@@ -15,5 +15,5 @@ EXPOSE 80
 #ENTRYPOINT  ["/usr/sbin/nginx"]
 ENTRYPOINT ["/bin/sh"]
 
-# docker build -t vincentserpoul/nano_nginx ./docker.io/vincentserpoul/nano_nginx/
-# docker run -dit --name mynanonginx -p 80:80 -v /home/core/www:/var/www  -d vincentserpoul/nano_nginx
+# docker build -t vincentserpoul/nginx ./docker.io/vincentserpoul/nginx/
+# docker run -dit --name mynanonginx -p 80:80 -v /home/core/www:/var/www  -d vincentserpoul/nginx

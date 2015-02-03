@@ -38,5 +38,5 @@ VOLUME ["/var/demo"]
 # Set default container command
 ENTRYPOINT  ["service", "php5-fpm", "start"]
 
-# docker build -t vincentserpoul/phpfpm_53 docker.io/vincentserpoul/phpfpm_53
-# docker stop myphpfpm_53;docker rm myphpfpm_53;docker run --name myphpfpm_53 -dit -p 9000:9000 vincentserpoul/phpfpm_53
+# docker build -t vincentserpoul/phpfpm53 docker.io/vincentserpoul/phpfpm53
+# docker stop myphpfpm53;docker rm myphpfpm53;docker run --name myphpfpm53 -dit -p 9000:9000 vincentserpoul/phpfpm53

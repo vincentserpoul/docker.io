@@ -1,0 +1,15 @@
+mysqldatastore:
+    image: busybox
+    ports:
+        - "23:23"
+    volumes:
+        - "/var/lib/mysql"
+percona:
+    image: vincentserpoul/percona
+    restart: always
+    ports:
+        - "3306:3306"
+    volumes_from:
+        - mysqldatastore
+    environment:
+        PERCONA_PASS: "password"

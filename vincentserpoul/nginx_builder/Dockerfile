@@ -138,6 +138,5 @@ RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /
 
 CMD /bin/bash
 
-# docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
 # docker run vincentserpoul/nginx_builder cat /rootfs.tar > rootfs.tar
 

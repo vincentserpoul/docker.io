@@ -7,9 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 # inspired by https://github.com/hacfi/dockerfiles/tree/master/percona
 # and https://github.com/tutumcloud/tutum-docker-mariadb
 
-# Set the env variable DEBIAN_FRONTEND to noninteractive
-ENV DEBIAN_FRONTEND noninteractive
-
 # Fix locales
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 

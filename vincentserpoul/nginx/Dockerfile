@@ -3,11 +3,8 @@ FROM scratch
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
 ADD rootfs.tar /
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-# pagespeed cache
-RUN mkdir -p /var/ngx_pagespeed_cache &&\
-    mkdir -p /var/log/nginx
+RUN ln -s etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
 EXPOSE 80
 

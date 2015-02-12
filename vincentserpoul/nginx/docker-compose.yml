@@ -3,5 +3,3 @@ nginx:
     restart: always
     ports:
         - "80:80"
-    volumes:
-        - "/home/core/www:/var/www"

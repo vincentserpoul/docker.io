@@ -1,7 +1,0 @@
-phpfpm53:
-    image: vincentserpoul/phpfpm53
-    restart: always
-    ports:
-        - "9000:9000"
-    volumes:
-        - "/home/core/www:/var/www"

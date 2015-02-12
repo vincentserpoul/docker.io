@@ -1,7 +1,7 @@
-FROM ubuntu:14.04
-
+FROM ubuntu:latest
+# inspired by https://github.com/hacfi/dockerfiles/tree/master/percona
+# and https://github.com/tutumcloud/tutum-docker-mariadb
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
-
 
 # Set the env variable DEBIAN_FRONTEND to noninteractive
 ENV DEBIAN_FRONTEND noninteractive
@@ -14,10 +14,10 @@ ENV HOME /root
 
 # Run upgrades
 RUN echo udev hold | dpkg --set-selections && \
-echo initscripts hold | dpkg --set-selections &&\
-echo upstart hold | dpkg --set-selections &&\
-apt-get update -q &&\
-apt-get -y upgrade
+    echo initscripts hold | dpkg --set-selections &&\
+    echo upstart hold | dpkg --set-selections &&\
+    apt-get update -q &&\
+    apt-get -y upgrade
 
 # Prerequisites
 RUN apt-get install -y wget vim

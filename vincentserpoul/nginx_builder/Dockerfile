@@ -1,4 +1,4 @@
-FROM ubuntu:14.04
+FROM ubuntu:latest
 # ALL CREDITS GOES TO: https://github.com/Zenithar/dockerfiles
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
@@ -7,9 +7,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Fix locales
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
-
-# Enable universe & src
-RUN sed -i s/main/'main universe'/ /etc/apt/sources.list
 
 # Set correct environment variables.
 ENV HOME /root
@@ -57,8 +54,8 @@ RUN cd ngx_pagespeed-${PSOL_VERSION}-beta &&\
 
 RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --prefix=/opt/nginx \
-    --user=nobody \
-    --group=nogroup \
+    --user=www-data \
+    --group=www-data \
     --conf-path=/etc/nginx/nginx.conf \
     --error-log-path=/var/log/nginx/error.log \
     --sbin-path=/usr/sbin/nginx \
@@ -118,8 +115,8 @@ RUN touch etc/resolv.conf
 RUN cp /etc/nsswitch.conf etc/nsswitch.conf
 RUN echo root:x:0:0:root:/:/bin/sh > etc/passwd
 RUN echo root:x:0: > etc/group
-RUN fgrep nobody /etc/passwd >> etc/passwd
-RUN fgrep nogroup /etc/group >> etc/group
+RUN fgrep www-data /etc/passwd >> etc/passwd
+RUN fgrep www-data /etc/group >> etc/group
 RUN ln -s lib lib64
 RUN ln -s usr/lib lib64
 RUN ln -s bin sbin
@@ -130,13 +127,29 @@ RUN bash -c "cp /lib/x86_64-linux-gnu/lib{c,dl,nsl,nss_*,pthread,resolv,crypt,rt
 RUN bash -c "cp /usr/lib/x86_64-linux-gnu/lib{gd,GeoIP,stdc++,jpeg,png12,freetype,fontconfig,Xpm,vpx,tiff,X11,jbig,xcb,Xau,Xdmcp}.so.* lib"
 RUN cp /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 lib
 ADD etc/nginx /rootfs/etc/nginx
-RUN mkdir /rootfs/etc/nginx/sites-enabled
-RUN bash -c "mkdir -p /rootfs/var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}"
-RUN mkdir /rootfs/var/www && bash -c "mkdir -p /rootfs/var/www/{empty,default}" && mv /rootfs/opt/nginx/html/* /rootfs/var/www/default && rm -Rf /rootfs/opt/nginx && chown -R nobody:nogroup /rootfs/var/www
+RUN mkdir /rootfs/etc/nginx/sites-enabled &&\
+    bash -c "mkdir -p /rootfs/var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}" &&\
+    bash -c "mkdir -p /rootfs/var/www/{empty,default}" &&\
+    mv /rootfs/opt/nginx/html/* /rootfs/var/www/default &&\
+    rm -Rf /rootfs/opt/nginx &&\
+    chown -R www-data:www-data /rootfs/var/www &&\
+    mkdir -p /rootfs/var/run &&\
+    touch /rootfs/var/run/nginx.pid &&\
+    chown www-data:www-data /rootfs/var/run/nginx.pid &&\
+    mkdir -p /rootfs/tmp/nginx &&\
+    mkdir -p /rootfs/var/ngx_pagespeed_cache &&\
+    mkdir -p /rootfs/var/log/nginx &&\
+    chown -R www-data:www-data /rootfs/var/ngx_pagespeed_cache &&\
+    chown -R www-data:www-data /rootfs/var/log/nginx &&\
+    chown -R www-data:www-data /rootfs/tmp/nginx &&\
+    chown -R www-data:www-data /rootfs/var/lib/nginx/
+
 RUN tar cf /rootfs.tar .
 RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /rootfs.tar -C/ ./dev/$X ; done
 
 CMD /bin/bash
 
-# docker run vincentserpoul/nginx_builder cat /rootfs.tar > rootfs.tar
-
+# docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
+# docker run vincentserpoul/nginx_builder cat /rootfs.tar > docker.io/vincentserpoul/nginx/rootfs.tar
+# docker build -t vincentserpoul/nginx ./docker.io/vincentserpoul/nginx/
+# docker run -it vincentserpoul/nginx /bin/sh

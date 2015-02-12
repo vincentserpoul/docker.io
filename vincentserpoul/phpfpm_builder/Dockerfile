@@ -1,0 +1,128 @@
+FROM ubuntu:latest
+# ALL CREDITS GOES TO: https://github.com/Zenithar/dockerfiles
+# https://stavrovski.net/blog/build-and-install-php-5329-from-source-on-an-ubuntu-1404-lts-server
+MAINTAINER Vincent Serpoul <vincent@serpoul.com>
+
+# Set the env variable DEBIAN_FRONTEND to noninteractive
+ENV DEBIAN_FRONTEND noninteractive
+
+# Fix locales
+RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
+
+# Set correct environment variables.
+ENV HOME /root
+
+# Run upgrades
+RUN echo udev hold | dpkg --set-selections && \
+    echo initscripts hold | dpkg --set-selections &&\
+    echo upstart hold | dpkg --set-selections &&\
+    apt-get update -q &&\
+    apt-get -y upgrade
+
+# Install build tools for php
+RUN apt-get -y install wget git unzip vim build-essential autoconf \
+        libfcgi-dev libfcgi0ldbl libjpeg62-dbg libmcrypt-dev libssl-dev libbz2-dev \
+        libjpeg-dev libfreetype6-dev libpng12-dev libxpm-dev libxml2-dev libpcre3-dev \
+        libbz2-dev libcurl4-openssl-dev libjpeg-dev libpng12-dev libxpm-dev \
+        libfreetype6-dev libmysqlclient-dev libt1-dev libgd2-xpm-dev libgmp-dev \
+        libsasl2-dev libmhash-dev unixodbc-dev freetds-dev libpspell-dev libsnmp-dev \
+        libtidy-dev libxslt1-dev libmcrypt-dev libdb5.3-dev
+
+# Download php
+ENV PHP_VERSION 5.3.29
+
+WORKDIR /usr/src
+
+RUN wget -O php-${PHP_VERSION}.tar.gz http://bg2.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
+
+RUN for file in /usr/src/*.tar.gz; do tar -xf $file; rm -rf $file; done
+
+# freetype error fix
+RUN mkdir -p /usr/include/freetype2/freetype &&\
+    ln -s /usr/include/freetype2/freetype.h /usr/include/freetype2/freetype/freetype.h
+
+# Configure php
+RUN cd /usr/src/php-${PHP_VERSION} &&\
+    ./configure \
+    --prefix=/usr/local \
+    --with-mcrypt \
+    --with-openssl \
+    --with-mysql \
+    --with-mysql-sock \
+    --with-gd \
+    --with-jpeg-dir=/usr/lib \
+    --with-pdo-mysql \
+    --with-libxml-dir=/usr/lib \
+    --with-curl \
+    --with-zlib \
+    --with-iconv \
+    --with-gettext \
+    --with-t1lib=/usr \
+    --with-freetype-dir=/usr \
+    --enable-mbstring \
+    --enable-gd-native-ttf \
+    --enable-zip  \
+    --enable-sockets \
+    --enable-exif \
+    --enable-ftp \
+    --enable-fpm \
+    --with-config-file-path=/usr/local/etc/ \
+    --with-fpm-user=www-data \
+    --with-fpm-group=www-data
+
+RUN mkdir /rootfs
+RUN cd /usr/src/php-${PHP_VERSION} && make && make INSTALL_ROOT=/rootfs install
+
+RUN apt-get install -qy busybox-static
+
+# Build Root FS for nano image creation
+WORKDIR /rootfs
+RUN mkdir -p bin etc dev dev/pts lib proc sys tmp usr
+RUN touch etc/resolv.conf
+RUN cp /etc/nsswitch.conf etc/nsswitch.conf
+RUN echo root:x:0:0:root:/:/bin/sh > etc/passwd
+RUN echo root:x:0: > etc/group
+RUN fgrep www-data /etc/passwd >> etc/passwd
+RUN fgrep www-data /etc/group >> etc/group
+RUN ln -s lib lib64
+RUN ln -s usr/lib lib64
+RUN ln -s bin sbin
+RUN cp /bin/busybox bin
+RUN for X in $(busybox --list) ; do ln -s busybox bin/$X ; done
+# thanks to ldd /opt/php/sbin/php-fpm
+RUN bash -c "cp /usr/lib/x86_64-linux-gnu/lib{ldap_r-2.4,mysqlclient,freetype,png12,jpeg,xml2,curl,idn,rtmp,lber-2.4,gnutls,k5crypto,krb5support,sasl2,gssapi,gssapi_krb5,tasn1,p11-kit,heimntlm,krb5,asn1,hcrypto,roken,ffi,wind,heimbase,hx509,sqlite3}.so.* lib"
+RUN bash -c "cp /lib/x86_64-linux-gnu/lib{resolv,rt,dl,m,ssl,crypto,c,pthread,gcrypt,com_err,gpg-error,keyutils,crypt,lzma,gcc_s,nsl,nss_*,expat,z}.so.* lib"
+RUN cp /usr/lib/libmcrypt.so.4 lib
+RUN cp /usr/lib/libt1.so.5 lib
+RUN cp /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 lib
+ADD etc /rootfs/usr/local/etc/
+RUN chown -R www-data:www-data /rootfs/usr/local/etc/ &&\
+    mkdir -p /rootfs/var/log/php-fpm &&\
+    mkdir -p /rootfs/var/run &&\
+    chown -R www-data:www-data /rootfs/var/log/php-fpm/ &&\
+    touch /rootfs/var/run/php5-fpm.pid &&\
+    chown www-data:www-data /rootfs/var/run/php5-fpm.pid
+
+# Install extensions
+# Prepare
+RUN rm usr/local/bin/phar &&\
+    cp usr/local/bin/* /usr/local/bin/ &&\
+    cp -r usr/local/lib/php /usr/local/lib/ &&\
+    mkdir /usr/local/include/php &&\
+    cp -r usr/local/include/php/* /usr/local/include/php/
+# Redis
+RUN pecl install redis apc
+RUN echo "extension=/usr/local/lib/php/extensions/redis.so" >> /usr/src/php-5.3.29/php.ini-production &&\
+    echo "extension=/usr/local/lib/php/extensions/apc.so" >> /usr/src/php-5.3.29/php.ini-production &&\
+    cp /usr/src/php-5.3.29/php.ini-production /rootfs/usr/local/etc/php.ini &&\
+    mkdir /rootfs/usr/local/lib/php/extensions &&\
+    cp /usr/local/lib/php/extensions/no-debug-non-zts-20090626/* /rootfs/usr/local/lib/php/extensions/
+
+RUN tar cf /rootfs.tar .
+RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /rootfs.tar -C/ ./dev/$X ; done
+
+CMD /bin/bash
+
+# docker build -t vincentserpoul/phpfpm_builder docker.io/vincentserpoul/phpfpm_builder
+# docker run vincentserpoul/phpfpm_builder cat /rootfs.tar > docker.io/vincentserpoul/phpfpm/rootfs.tar
+

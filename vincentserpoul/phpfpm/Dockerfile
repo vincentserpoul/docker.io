@@ -7,6 +7,6 @@ ADD rootfs.tar /
 EXPOSE 9000
 
 # Set default container command
-ENTRYPOINT  ["/usr/local/sbin/php-fpm"]
+# ENTRYPOINT  ["/usr/local/sbin/php-fpm"]
 
-# CMD /bin/sh
+CMD /bin/sh

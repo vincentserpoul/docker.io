@@ -64,3 +64,6 @@ RUN tar cf /rootfs.tar .
 RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /rootfs.tar -C/ ./dev/$X ; done
 
 CMD /bin/bash
+
+# docker build -t vincentserpoul/redis_builder docker.io/vincentserpoul/redis_builder
+# docker run vincentserpoul/redis_builder cat /rootfs.tar > docker.io/vincentserpoul/redis/rootfs.tar

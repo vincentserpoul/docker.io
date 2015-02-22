@@ -18,7 +18,7 @@ server {
     location ~ "^/pagespeed_static/" { }
     location ~ "^/ngx_pagespeed_beacon$" { }
 
-    location / {
+    location /demo {
         proxy_pass  http://tgv:8080;
         proxy_set_header Host $http_host;
         proxy_set_header X-Real-IP $remote_addr;

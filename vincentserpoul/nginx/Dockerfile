@@ -1,4 +1,4 @@
-FROM scratch
+FROM centurylink/ca-certs
 # ALL CREDITS GOES TO: https://github.com/Zenithar/dockerfiles
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 

@@ -1,4 +1,2 @@
-#!/bin/bash
--e
-
+#!bin/sh
 /entrypoint.sh mysqld

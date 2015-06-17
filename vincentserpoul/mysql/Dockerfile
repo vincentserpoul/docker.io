@@ -17,6 +17,6 @@ CMD ["mysqld"]
 
 # sudo docker rm -f ohmy;
 # sudo docker rm mysqldatastore;sudo docker run --name mysqldatastore -p 23:23 -v /var/lib/mysql -v /var/lib/mysql-files busybox /bin/sh;
-# sudo docker build -t "go-websteam/mysql57" ./;
-# sudo docker run -dit --name ohmy -p 3306:3306 --volumes-from mysqldatastore -v $(pwd)/log:/var/log -e MYSQL_ROOT_PASSWORD=dev go-websteam/mysql57
-# sudo docker exec -it ohmy "mysql -root -pdev < /var/data/go-websteam.sql"
+# sudo docker build -t "vincentserpoul/mysql57" ./;
+# sudo docker run -dit --name ohmy -p 3306:3306 --volumes-from mysqldatastore -v $(pwd)/log:/var/log -e MYSQL_ROOT_PASSWORD=dev vincentserpoul/mysql57
+# sudo docker exec -it ohmy "mysql -root -pdev < /var/data/data.sql"

@@ -22,12 +22,11 @@ RUN echo udev hold | dpkg --set-selections && \
 RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2-xpm-dev libgeoip1 libgeoip-dev libpam0g libssl1.0.0 libxml2 libperl-dev perl perl-base
 
 # Download nginx
-ENV PCRE_VERSION 8.36
+ENV PCRE_VERSION 8.37
 ENV ZLIB_VERSION 1.2.8
-ENV OPENSSL_VERSION 1.0.2
-ENV NGINX_VERSION 1.7.9
-ENV HDR_MORE_MOD_VERSION 0.25
-ENV DAV_EXT_VERSION 0.0.3
+ENV OPENSSL_VERSION 1.0.2d
+ENV NGINX_VERSION 1.9.4
+ENV HDR_MORE_MOD_VERSION 0.261
 ENV PSOL_VERSION 1.9.32.3
 ENV HTTP_SUB_FILTER_VERSION 0.6.4
 
@@ -38,9 +37,7 @@ RUN wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 RUN wget ftp://ftp.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
 RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN wget https://github.com/agentzh/headers-more-nginx-module/archive/v${HDR_MORE_MOD_VERSION}.tar.gz
-RUN wget https://github.com/arut/nginx-dav-ext-module/archive/v${DAV_EXT_VERSION}.tar.gz
 RUN wget https://github.com/pagespeed/ngx_pagespeed/archive/v${PSOL_VERSION}-beta.tar.gz
-RUN wget https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/v${HTTP_SUB_FILTER_VERSION}.tar.gz
 
 RUN for file in /usr/src/*.tar.gz; do tar -xf $file; rm -rf $file; done
 
@@ -90,13 +87,11 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --add-module=/usr/src/ngx_pagespeed-${PSOL_VERSION}-beta \
     --add-module=/usr/src/headers-more-nginx-module-${HDR_MORE_MOD_VERSION} \
     --with-http_geoip_module \
-    --with-http_image_filter_module \
-    --add-module=/usr/src/nginx-dav-ext-module-${DAV_EXT_VERSION} \
-    --add-module=/usr/src/ngx_http_substitutions_filter_module-${HTTP_SUB_FILTER_VERSION} &&\
-    mkdir -p /var/lib/nginx &&\
-    mkdir -p /www
-
-RUN mkdir /rootfs
+    --with-http_image_filter_module
+    
+RUN mkdir -p /var/lib/nginx &&\
+    mkdir -p /www &&\
+    mkdir /rootfs 
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make DESTDIR=/rootfs install
 
 # Add geoIP Data from maxmind
@@ -151,5 +146,5 @@ CMD /bin/bash
 
 # docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
 # docker run vincentserpoul/nginx_builder cat /rootfs.tar > docker.io/vincentserpoul/nginx/rootfs.tar
-# docker build -t vincentserpoul/nginx ./docker.io/vincentserpoul/nginx/
+# docker build -t vincentserpoul/nginx docker.io/vincentserpoul/nginx/
 # docker run -it vincentserpoul/nginx /bin/sh

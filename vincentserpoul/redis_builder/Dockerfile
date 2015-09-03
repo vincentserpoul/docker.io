@@ -8,6 +8,9 @@ ENV DEBIAN_FRONTEND noninteractive
 # Fix locales
 RUN locale-gen en_US.UTF-8 && dpkg-reconfigure locales
 
+# Set correct environment variables.
+ENV HOME /root
+
 # Run upgrades
 RUN echo udev hold | dpkg --set-selections && \
     echo initscripts hold | dpkg --set-selections &&\
@@ -15,10 +18,7 @@ RUN echo udev hold | dpkg --set-selections && \
     apt-get update -q &&\
     apt-get -y upgrade
 
-# Set correct environment variables.
-ENV HOME /root
-
-# Install build tools for php
+# Install build tools for redis
 RUN apt-get -y install wget git unzip vim \
     build-essential libc6 libc6-dev
 

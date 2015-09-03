@@ -23,7 +23,7 @@ RUN apt-get -y install wget git unzip vim \
     build-essential libc6 libc6-dev
 
 # Download redis
-ENV REDIS_VERSION 2.8.19
+ENV REDIS_VERSION 3.0.3
 
 WORKDIR /usr/src
 

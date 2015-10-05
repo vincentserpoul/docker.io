@@ -4,10 +4,7 @@ RUN apk add --update curl redis && rm -rf /var/cache/apk/*
 ENV REDIS_PASSWORD password
 
 RUN echo '#!/bin/sh ' >> /run.sh
-RUN echo 'redis-server ' >> /run.sh &&\
-    echo '--dir /var/data/redis >> /run.sh &&\
-    echo '--appendonly yes ' >> /run.sh &&\
-    echo '--requirepass "${REDIS_PASSWORD}"' >> /run.sh'
+RUN echo 'redis-server --dir /var/data/redis --appendonly yes --requirepass "${REDIS_PASSWORD}"' >> /run.sh
 RUN chmod +x /run.sh
 RUN mkdir -p /var/data/redis &&\
     chown -R redis:redis /var/data/redis

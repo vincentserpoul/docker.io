@@ -1,4 +1,5 @@
-FROM alpine:latest
+FROM alpine:edge
+MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
 RUN apk add --update curl redis && rm -rf /var/cache/apk/*
 ENV REDIS_PASSWORD password

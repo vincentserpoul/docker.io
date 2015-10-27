@@ -1,12 +1,10 @@
-FROM scratch
-# ALL CREDITS GOES TO: https://github.com/Zenithar/dockerfiles
+FROM alpine:edge
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-ADD rootfs.tar /
+RUN apk add --update php-fpm && rm -rf /var/cache/apk/*
 
 EXPOSE 9000
+CMD ["/bin/sh"]
 
-# Set default container command
-# ENTRYPOINT  ["/usr/local/sbin/php-fpm"]
-
-CMD /bin/sh
+# docker build -t vincentserpoul/phpfpm ./
+# docker run -dit --restart=always --name phpfpm -p 3306:3306 vincentserpoul/phpfpm

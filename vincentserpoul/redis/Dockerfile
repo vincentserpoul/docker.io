@@ -1,7 +1,13 @@
 FROM alpine:edge
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-RUN apk add --update curl redis && rm -rf /var/cache/apk/*
+RUN apk -U upgrade && \
+    apk --update add \
+      redis \
+      && \
+      rm -rf /tmp/src && \
+      rm -rf /var/cache/apk/*
+
 ENV REDIS_PASSWORD password
 
 RUN echo '#!/bin/sh ' >> /run.sh
@@ -13,4 +19,5 @@ RUN mkdir -p /var/data/redis &&\
 EXPOSE 6379
 CMD ["/run.sh"]
 
+# docker build --rm -t vincentserpoul/redis ./
 # docker run -dit --restart=always --name redis -p 6379:6379 -e REDIS_PASSWORD=dev vincentserpoul/redis

@@ -1,7 +1,12 @@
 FROM alpine:edge
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-RUN apk add --update php-fpm && rm -rf /var/cache/apk/*
+RUN apk -U upgrade && \
+    apk --update add \
+      php-fpm \
+      && \
+      rm -rf /tmp/src && \
+      rm -rf /var/cache/apk/*
 
 EXPOSE 9000
 CMD ["/bin/sh"]

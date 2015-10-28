@@ -15,11 +15,14 @@ ENV LANG="en_US.UTF-8" \
     MYSQL_PASSWORD="password"
 
 ADD etc/mysql/my.cnf /etc/mysql/
-ADD start.sh /
-
-RUN chmod u+x /start.sh
+RUN chmod -R go-rwx /etc/mysql/*
+RUN chmod -R u-x /etc/mysql/*
 RUN mkdir -p /var/log/mysql
 RUN chown -R mysql: /var/log/mysql
+
+ADD start.sh /
+RUN chmod u+x /start.sh
+
 
 EXPOSE 3306
 CMD ["/start.sh"]

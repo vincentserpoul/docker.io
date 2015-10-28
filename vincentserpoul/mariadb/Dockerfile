@@ -28,5 +28,5 @@ EXPOSE 3306
 CMD ["/start.sh"]
 
 # docker build --rm -t vincentserpoul/mariadb ./
-# sudo docker rm mariadatastore;sudo docker run --name mariadatastore -p 23:23 -v /var/lib/mysql -v /var/lib/mysql-files busybox /bin/sh;
+# docker rm mariadatastore;docker run --name mariadatastore -p 23:23 -v /var/lib/mysql busybox /bin/sh;
 # docker stop ohmaria;docker rm ohmaria;docker run -dit --restart=always --name ohmaria -p 3306:3306 -e MYSQL_USER=user -e MYSQL_PASSWORD=password --volumes-from mariadatastore vincentserpoul/mariadb

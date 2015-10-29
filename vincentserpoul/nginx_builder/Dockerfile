@@ -25,10 +25,9 @@ RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2
 ENV PCRE_VERSION 8.37
 ENV ZLIB_VERSION 1.2.8
 ENV OPENSSL_VERSION 1.0.2d
-ENV NGINX_VERSION 1.9.4
-ENV HDR_MORE_MOD_VERSION 0.261
-ENV PSOL_VERSION 1.9.32.3
-ENV HTTP_SUB_FILTER_VERSION 0.6.4
+ENV NGINX_VERSION 1.8.0
+ENV HDR_MORE_MOD_VERSION 0.27
+ENV PSOL_VERSION 1.9.32.10
 
 WORKDIR /usr/src
 
@@ -88,10 +87,10 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --add-module=/usr/src/headers-more-nginx-module-${HDR_MORE_MOD_VERSION} \
     --with-http_geoip_module \
     --with-http_image_filter_module
-    
+
 RUN mkdir -p /var/lib/nginx &&\
     mkdir -p /www &&\
-    mkdir /rootfs 
+    mkdir /rootfs
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make DESTDIR=/rootfs install
 
 # Add geoIP Data from maxmind
@@ -122,6 +121,7 @@ RUN bash -c "cp /lib/x86_64-linux-gnu/lib{c,dl,nsl,nss_*,pthread,resolv,crypt,rt
 RUN bash -c "cp /usr/lib/x86_64-linux-gnu/lib{gd,GeoIP,stdc++,jpeg,png12,freetype,fontconfig,Xpm,vpx,tiff,X11,jbig,xcb,Xau,Xdmcp}.so.* lib"
 RUN cp /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 lib
 ADD etc/nginx /rootfs/etc/nginx
+ADD ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 RUN mkdir /rootfs/etc/nginx/sites-enabled &&\
     bash -c "mkdir -p /rootfs/var/lib/nginx/{body,fastcgi,proxy,scgi,uwsgi}" &&\
     bash -c "mkdir -p /rootfs/var/www/{empty,default}" &&\
@@ -144,7 +144,5 @@ RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /
 
 CMD /bin/bash
 
-# docker build -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
+# docker build --rm -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
 # docker run vincentserpoul/nginx_builder cat /rootfs.tar > docker.io/vincentserpoul/nginx/rootfs.tar
-# docker build -t vincentserpoul/nginx docker.io/vincentserpoul/nginx/
-# docker run -it vincentserpoul/nginx /bin/sh

@@ -8,8 +8,11 @@ RUN apk -U upgrade && \
       rm -rf /tmp/src && \
       rm -rf /var/cache/apk/*
 
-EXPOSE 9000
-CMD ["/bin/sh"]
+ADD etc/php/php-fpm.conf /etc/php/php-fpm.conf
+ADD etc/fpm.d/www.conf /etc/fpm.d/www.conf
 
-# docker build -t vincentserpoul/phpfpm ./
-# docker run -dit --restart=always --name phpfpm -p 3306:3306 vincentserpoul/phpfpm
+EXPOSE 9000
+CMD ["php-fpm"]
+
+# docker build --rm -t vincentserpoul/phpfpm ./
+# docker run -dit --restart=always --name phpfpm -p 9000:9000 vincentserpoul/phpfpm

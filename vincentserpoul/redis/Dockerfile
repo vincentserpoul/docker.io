@@ -8,10 +8,14 @@ RUN apk -U upgrade && \
       rm -rf /tmp/src && \
       rm -rf /var/cache/apk/*
 
-ENV REDIS_PASSWORD password
+ENV REDIS_PASSWORD nopassword
 
 RUN echo '#!/bin/sh ' >> /run.sh
-RUN echo 'redis-server --dir /var/data/redis --appendonly yes --requirepass "${REDIS_PASSWORD}"' >> /run.sh
+
+RUN if [ ${REDIS_PASSWORD} != 'nopassword' ]; \
+    then echo 'redis-server --dir /var/data/redis --appendonly yes  --requirepass "${REDIS_PASSWORD}"'  >> /run.sh; \
+    else echo 'redis-server --dir /var/data/redis --appendonly yes ' >> /run.sh; \
+    fi
 RUN chmod +x /run.sh
 RUN mkdir -p /var/data/redis &&\
     chown -R redis:redis /var/data/redis

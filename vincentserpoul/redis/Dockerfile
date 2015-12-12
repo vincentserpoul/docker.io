@@ -1,4 +1,4 @@
-FROM alpine:edge
+FROM alpine
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
 RUN apk -U upgrade && \

@@ -4,9 +4,9 @@ echo "=> starting up!"
 if [[ ! -d $VOLUME_HOME/mysql ]]; then
     echo "=> An empty or uninitialized MariaDB volume is detected in $VOLUME_HOME"
     echo "=> Installing MariaDB ..."
-    mysql_install_db --user=mysql
+    mysql_install_db --user=root
 
-    /usr/bin/mysqld_safe &
+    /usr/bin/mysqld_safe --user=root &
     sleep 10s
 
     echo "GRANT ALL ON *.* TO ${MYSQL_USER}@'%' IDENTIFIED BY '${MYSQL_PASSWORD}' WITH GRANT OPTION;GRANT ALL ON *.* TO ${MYSQL_USER}@'localhost' IDENTIFIED BY '${MYSQL_PASSWORD}' WITH GRANT OPTION; FLUSH PRIVILEGES;" | mysql -u root --password=""
@@ -23,4 +23,4 @@ else
     echo "=> Using an existing volume"
 fi
 
-mysqld_safe --user=mysql
+mysqld_safe --user=root

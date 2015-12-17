@@ -24,8 +24,8 @@ RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2
 # Download nginx
 ENV PCRE_VERSION 8.37
 ENV ZLIB_VERSION 1.2.8
-ENV OPENSSL_VERSION 1.0.2d
-ENV NGINX_VERSION 1.8.0
+ENV OPENSSL_VERSION 1.0.2e
+ENV NGINX_VERSION 1.9.9
 ENV HDR_MORE_MOD_VERSION 0.27
 ENV PSOL_VERSION 1.9.32.10
 
@@ -47,7 +47,7 @@ RUN cd ngx_pagespeed-${PSOL_VERSION}-beta &&\
     rm -f ${PSOL_VERSION}.tar.gz
 
 # Configure nginx
-
+RUN ls /usr/src/nginx-${NGINX_VERSION}
 RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --prefix=/opt/nginx \
     --user=www-data \
@@ -70,7 +70,6 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --with-http_realip_module \
     --with-http_stub_status_module \
     --with-http_ssl_module \
-    --with-http_spdy_module \
     --with-http_sub_module \
     --with-ipv6 \
     --with-mail \
@@ -144,5 +143,5 @@ RUN for X in null ptmx random stdin stdout stderr tty urandom zero ; do tar uf /
 
 CMD /bin/bash
 
-# docker build --rm -t vincentserpoul/nginx_builder docker.io/vincentserpoul/nginx_builder
-# docker run vincentserpoul/nginx_builder cat /rootfs.tar > docker.io/vincentserpoul/nginx/rootfs.tar
+# docker build --rm -t vincentserpoul/nginx_build -f Dockerfile_build ./
+# docker run vincentserpoul/nginx_build cat /rootfs.tar > ./rootfs.tar

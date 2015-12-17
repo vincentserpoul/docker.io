@@ -17,7 +17,8 @@ RUN aptitude -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache php7.0-dev 
 
 ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf
 ADD php.ini  /etc/php/7.0/fpm/php.ini
-
+RUN mkdir -p /logs
+RUN mkdir -p /run/php
 EXPOSE 9000
 
 ENTRYPOINT ["/usr/sbin/php-fpm7.0"]

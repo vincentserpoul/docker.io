@@ -1,12 +1,10 @@
 FROM alpine:edge
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-RUN apk -U upgrade && \
-    apk --update add \
-      redis \
-      && \
-      rm -rf /tmp/src && \
-      rm -rf /var/cache/apk/*
+RUN apk -U upgrade &&\
+    apk --update add redis &&\
+    rm -rf /tmp/src &&\
+    rm -rf /var/cache/apk/*
 
 ENV REDIS_PASSWORD dev
 

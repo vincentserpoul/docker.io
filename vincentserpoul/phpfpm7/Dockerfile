@@ -17,9 +17,13 @@ RUN aptitude -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache php7.0-dev 
 
 ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf
 ADD php.ini  /etc/php/7.0/fpm/php.ini
-RUN mkdir -p /logs
+RUN ln -sf /dev/stdout var/log/php-fpm_access.log &&\
+    ln -sf /dev/stderr var/log/php-fpm_error.log
+
 RUN mkdir -p /run/php
 EXPOSE 9000
 
 ENTRYPOINT ["/usr/sbin/php-fpm7.0"]
 CMD ["-F", "-R"]
+
+# docker build --rm -t vincentserpoul/phpfpm7 ./

@@ -4,7 +4,7 @@ MAINTAINER vincent@serpoul.com
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -y
-RUN apt-get install -y aptitude curl wget debian-keyring debian-archive-keyring apt-transport-https
+RUN apt-get install -y aptitude curl wget debian-keyring debian-archive-keyring apt-transport-https sendmail
 
 RUN wget https://www.dotdeb.org/dotdeb.gpg
 RUN apt-key add dotdeb.gpg

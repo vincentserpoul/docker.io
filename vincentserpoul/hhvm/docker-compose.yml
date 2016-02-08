@@ -1,7 +1,0 @@
-hhvm:
-    image: vincentserpoul/hhvm
-    restart: always
-    ports:
-        - "9000:9000"
-    volumes:
-        - "/home/core/www:/var/www"

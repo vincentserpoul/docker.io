@@ -1,29 +1,23 @@
-FROM debian:jessie
+FROM php:7-fpm
 MAINTAINER vincent@serpoul.com
 
-ENV DEBIAN_FRONTEND noninteractive
-
 RUN apt-get update -y
-RUN apt-get install -y aptitude curl wget debian-keyring debian-archive-keyring apt-transport-https sendmail
+RUN apt-get install -y \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng12-dev \
+    && docker-php-ext-install -j$(nproc) iconv mcrypt mysql curl json opcache \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
 
-RUN wget https://www.dotdeb.org/dotdeb.gpg
-RUN apt-key add dotdeb.gpg
+RUN pecl install redis \
+    && docker-php-ext-enable redis
 
-ADD dotdeb.list /etc/apt/sources.list.d/dotdeb.list
-
-RUN aptitude update
-RUN aptitude -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache php7.0-dev php7.0-mysql php7.0-intl \
-                        php7.0-gd php7.0-json php7.0-fpm
-
-ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf
-ADD php.ini  /etc/php/7.0/fpm/php.ini
+COPY www.conf /etc/php/7.0/fpm/pool.d/www.conf
+COPY php.ini /usr/local/etc/php/
+# ADD php.ini  /etc/php/7.0/fpm/php.ini
 RUN ln -sf /dev/stdout var/log/php-fpm_access.log &&\
     ln -sf /dev/stderr var/log/php-fpm_error.log
-
-RUN mkdir -p /run/php
-EXPOSE 9000
-
-ENTRYPOINT ["/usr/sbin/php-fpm7.0"]
-CMD ["-F", "-R"]
 
 # docker build --rm -t vincentserpoul/phpfpm7 ./

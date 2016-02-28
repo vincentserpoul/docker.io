@@ -37,6 +37,7 @@ RUN wget ftp://ftp.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
 RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 RUN wget https://github.com/agentzh/headers-more-nginx-module/archive/v${HDR_MORE_MOD_VERSION}.tar.gz
 RUN wget https://github.com/pagespeed/ngx_pagespeed/archive/v${PSOL_VERSION}-beta.tar.gz
+
 RUN for file in /usr/src/*.tar.gz; do tar -xf $file; rm -rf $file; done
 
 # Modules
@@ -70,17 +71,15 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --with-http_stub_status_module \
     --with-http_ssl_module \
     --with-http_sub_module \
-    --with-http_v2_module \
     --with-ipv6 \
     --with-mail \
-    --with-stream \
-    --with-stream_ssl_module \
-    --with-file-aio \
     --with-threads \
     --with-mail_ssl_module \
     --without-mail_pop3_module \
     --without-mail_imap_module \
     --without-mail_smtp_module \
+    --with-http_v2_module \
+    --with-file-aio \
     --with-openssl=/usr/src/openssl-${OPENSSL_VERSION} \
     --with-openssl-opt="enable-ec_nistp_64_gcc_128 no-krb5 enable-tlsext" \
     --with-pcre=/usr/src/pcre-${PCRE_VERSION} \
@@ -89,7 +88,6 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --add-module=/usr/src/ngx_pagespeed-${PSOL_VERSION}-beta \
     --add-module=/usr/src/headers-more-nginx-module-${HDR_MORE_MOD_VERSION} \
     --with-http_geoip_module \
-    --add-module=/usr/src/headers-more-nginx-module-${HDR_MORE_MOD_VERSION}
     --with-http_image_filter_module
 
 RUN mkdir -p /var/lib/nginx &&\

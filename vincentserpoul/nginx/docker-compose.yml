@@ -1,0 +1,5 @@
+nginx:
+    image: vincentserpoul/nginx
+    restart: always
+    ports:
+        - "80:80"

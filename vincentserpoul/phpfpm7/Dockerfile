@@ -11,15 +11,21 @@ RUN apt-key add dotdeb.gpg
 
 ADD dotdeb.list /etc/apt/sources.list.d/dotdeb.list
 
-RUN aptitude update
-RUN aptitude -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache php7.0-dev php7.0-mysql php7.0-intl \
-                        php7.0-gd php7.0-json php7.0-fpm
+RUN apt-get update
+RUN apt-get -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache \
+        php7.0-dev php7.0-mysql php7.0-intl  \
+        php7.0-gd php7.0-json php7.0-fpm php7.0-memcached
+
+RUN apt-get autoremove -y
 
 ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf
 ADD php.ini  /etc/php/7.0/fpm/php.ini
 
 RUN mkdir -p /run/php
 EXPOSE 9000
+
+RUN ln -sf /dev/stdout /var/log/php-fpm_access.log
+RUN ln -sf /dev/stderr /var/log/php-fpm_error.log
 
 ENTRYPOINT ["/usr/sbin/php-fpm7.0"]
 CMD ["-F", "-R"]

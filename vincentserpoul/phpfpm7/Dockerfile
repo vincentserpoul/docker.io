@@ -18,7 +18,7 @@ RUN apt-get -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache \
 
 RUN apt-get autoremove -y
 
-ADD www.conf /etc/php/7.0/fpm/pool.d/www.conf
+ADD www.conf /etc/php/7.0/fpm/php-fpm.conf
 ADD php.ini  /etc/php/7.0/fpm/php.ini
 
 RUN mkdir -p /run/php

@@ -28,4 +28,4 @@ ADD php.ini  /usr/local/etc/php/conf.d/tune.ini
 
 EXPOSE 9000
 
-# docker build --rm -t vincentserpoul/phpfpm7a ./
+# docker build --rm -t vincentserpoul/phpfpm7 ./

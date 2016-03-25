@@ -1,4 +1,5 @@
-FROM php:7.0.4-fpm-alpine
+#FROM php:7.0.4-fpm-alpine
+FROM vincentserpoul/php-7.0.4-fpm-alpine
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
 RUN apk -U upgrade && \

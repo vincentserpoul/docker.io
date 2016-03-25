@@ -1,33 +1,31 @@
-FROM debian:jessie
-MAINTAINER vincent@serpoul.com
+FROM php:7.0.4-fpm-alpine
+MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-ENV DEBIAN_FRONTEND noninteractive
+RUN apk -U upgrade && \
+    apk --update add \
+      libmemcached-dev libpng-dev icu-dev \
+      && \
+      rm -rf /tmp/src && \
+      rm -rf /var/cache/apk/*
 
-RUN apt-get update -y
-RUN apt-get install -y aptitude curl wget debian-keyring debian-archive-keyring apt-transport-https sendmail
+RUN docker-php-ext-install -j1 iconv mcrypt opcache mysqli json gd intl mbstring
 
-RUN wget https://www.dotdeb.org/dotdeb.gpg
-RUN apt-key add dotdeb.gpg
+RUN curl -fsSL 'https://github.com/php-memcached-dev/php-memcached/archive/php7.zip' -o memcached.zip \
+    && mkdir -p memcached \
+    && unzip memcached.zip \
+    && rm memcached.zip \
+    && ( \
+        cd php-memcached-php7 \
+        && phpize \
+        && ./configure --enable-memcached --disable-memcached-sasl \
+        && make -j1 \
+        && make install \
+    ) \
+    && rm -r memcached \
+    && docker-php-ext-enable memcached
 
-ADD dotdeb.list /etc/apt/sources.list.d/dotdeb.list
+ADD php.ini  /usr/local/etc/php/conf.d/tune.ini
 
-RUN apt-get update
-RUN apt-get -y install php7.0 php7.0-cli php7.0-curl php7.0-opcache \
-        php7.0-dev php7.0-mysql php7.0-intl  \
-        php7.0-gd php7.0-json php7.0-fpm php7.0-memcached
-
-RUN apt-get autoremove -y
-
-ADD www.conf /etc/php/7.0/fpm/php-fpm.conf
-ADD php.ini  /etc/php/7.0/fpm/php.ini
-
-RUN mkdir -p /run/php
 EXPOSE 9000
 
-RUN ln -sf /dev/stdout /var/log/php-fpm_access.log
-RUN ln -sf /dev/stderr /var/log/php-fpm_error.log
-
-ENTRYPOINT ["/usr/sbin/php-fpm7.0"]
-CMD ["-F", "-R"]
-
-# docker build --rm -t vincentserpoul/phpfpm7 ./
+# docker build --rm -t vincentserpoul/phpfpm7a ./

@@ -1,15 +1,13 @@
-FROM php:7.0.4-fpm
+#FROM php:7.0.4-fpm-alpine
+FROM vincentserpoul/php-7.0.4-fpm-alpine
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-RUN apt-get -o Acquire::CompressionTypes::Order::=gz update
-RUN apt-get install -y libmemcached-dev
-
-# apk -U upgrade && \
-#    apk --update add \
-#      libmemcached-dev libpng-dev icu-dev \
-#      && \
-#      rm -rf /tmp/src && \
-#      rm -rf /var/cache/apk/*
+RUN apk -U upgrade && \
+    apk --update add \
+      libmemcached-dev libpng-dev icu-dev \
+      && \
+      rm -rf /tmp/src && \
+      rm -rf /var/cache/apk/*
 
 RUN docker-php-ext-install -j1 iconv mcrypt opcache mysqli json gd intl mbstring
 

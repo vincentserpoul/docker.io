@@ -1,19 +1,14 @@
 FROM php:7.0.4-fpm
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
-RUN apt-get -o Acquire::CompressionTypes::Order::=gz update
-RUN apt-get install -y libmemcached-dev
-
-# apk -U upgrade && \
-#    apk --update add \
-#      libmemcached-dev libpng-dev icu-dev \
-#      && \
-#      rm -rf /tmp/src && \
-#      rm -rf /var/cache/apk/*
+RUN apt-get update
+RUN apt-get install -y libmemcached-dev libjpeg62-turbo-dev &&\
+    libmcrypt-dev libpng12-dev libicu-dev
 
 RUN docker-php-ext-install -j1 iconv mcrypt opcache mysqli json gd intl mbstring
 
-RUN curl -fsSL 'https://github.com/php-memcached-dev/php-memcached/archive/php7.zip' -o memcached.zip \
+RUN apt-get install  unzip &&\
+    curl -fsSL 'https://github.com/php-memcached-dev/php-memcached/archive/php7.zip' -o memcached.zip \
     && mkdir -p memcached \
     && unzip memcached.zip \
     && rm memcached.zip \
@@ -30,5 +25,6 @@ RUN curl -fsSL 'https://github.com/php-memcached-dev/php-memcached/archive/php7.
 ADD php.ini  /usr/local/etc/php/conf.d/tune.ini
 
 EXPOSE 9000
+
 
 # docker build --rm -t vincentserpoul/phpfpm7 ./

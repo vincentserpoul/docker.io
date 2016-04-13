@@ -19,15 +19,15 @@ RUN echo udev hold | dpkg --set-selections && \
     apt-get -y upgrade
 
 # Install build tools for nginx
-RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2-xpm-dev libgeoip1 libgeoip-dev libpam0g libssl1.0.0 libxml2 libperl-dev perl perl-base
+RUN apt-get -y install wget git unzip build-essential libc6 libexpat1-dev libgd2-xpm-dev libgeoip-dev libpam0g libssl1.0.0 libxml2 libperl-dev perl perl-base
 
 # Download nginx
 ENV PCRE_VERSION 8.38
 ENV ZLIB_VERSION 1.2.8
-ENV OPENSSL_VERSION 1.0.2f
-ENV NGINX_VERSION 1.9.12
-ENV HDR_MORE_MOD_VERSION 0.27
-ENV PSOL_VERSION 1.10.33.5
+ENV OPENSSL_VERSION 1.0.2g
+ENV NGINX_VERSION 1.9.14
+ENV HDR_MORE_MOD_VERSION 0.29
+ENV PSOL_VERSION 1.11.33.0
 
 WORKDIR /usr/src
 
@@ -35,7 +35,7 @@ RUN wget ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${PCRE_VERSI
 RUN wget http://zlib.net/zlib-${ZLIB_VERSION}.tar.gz
 RUN wget ftp://ftp.openssl.org/source/openssl-${OPENSSL_VERSION}.tar.gz
 RUN wget http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
-RUN wget https://github.com/agentzh/headers-more-nginx-module/archive/v${HDR_MORE_MOD_VERSION}.tar.gz
+RUN wget https://github.com/openresty/headers-more-nginx-module/archive/v${HDR_MORE_MOD_VERSION}.tar.gz
 RUN wget https://github.com/pagespeed/ngx_pagespeed/archive/v${PSOL_VERSION}-beta.tar.gz
 
 RUN for file in /usr/src/*.tar.gz; do tar -xf $file; rm -rf $file; done
@@ -87,20 +87,12 @@ RUN cd /usr/src/nginx-${NGINX_VERSION} && ./configure \
     --with-zlib=/usr/src/zlib-${ZLIB_VERSION} \
     --add-module=/usr/src/ngx_pagespeed-${PSOL_VERSION}-beta \
     --add-module=/usr/src/headers-more-nginx-module-${HDR_MORE_MOD_VERSION} \
-    --with-http_geoip_module \
     --with-http_image_filter_module
 
 RUN mkdir -p /var/lib/nginx &&\
     mkdir -p /www &&\
     mkdir /rootfs
 RUN cd /usr/src/nginx-${NGINX_VERSION} && make && make DESTDIR=/rootfs install
-
-# Add geoIP Data from maxmind
-RUN mkdir -p /rootfs/usr/local/share/GeoIP/ &&\
-    wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz -O /rootfs/usr/local/share/GeoIP/GeoLiteCity.dat.gz &&\
-    gzip -d /rootfs/usr/local/share/GeoIP/GeoLiteCity.dat.gz &&\
-    wget http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz -O /rootfs/usr/local/share/GeoIP/GeoIP.dat.gz &&\
-    gzip -d /rootfs/usr/local/share/GeoIP/GeoIP.dat.gz
 
 RUN apt-get install -qy busybox-static
 
@@ -120,7 +112,7 @@ RUN cp /bin/busybox bin
 RUN for X in $(busybox --list) ; do ln -s busybox bin/$X ; done
 # thanks to ldd /usr/sbin/nginx
 RUN bash -c "cp /lib/x86_64-linux-gnu/lib{c,dl,nsl,nss_*,pthread,resolv,crypt,rt,m,gcc_s,expat,z,lzma}.so.* lib"
-RUN bash -c "cp /usr/lib/x86_64-linux-gnu/lib{gd,GeoIP,stdc++,jpeg,png12,freetype,fontconfig,Xpm,vpx,tiff,X11,jbig,xcb,Xau,Xdmcp}.so.* lib"
+RUN bash -c "cp /usr/lib/x86_64-linux-gnu/lib{gd,stdc++,jpeg,png12,freetype,fontconfig,Xpm,vpx,tiff,X11,jbig,xcb,Xau,Xdmcp}.so.* lib"
 RUN cp /lib/x86_64-linux-gnu/ld-linux-x86-64.so.2 lib
 ADD etc/nginx /rootfs/etc/nginx
 ADD ca-certificates.crt /etc/ssl/certs/ca-certificates.crt

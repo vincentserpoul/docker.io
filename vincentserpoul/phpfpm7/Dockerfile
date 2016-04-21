@@ -25,6 +25,7 @@ RUN curl -fsSL https://github.com/phpredis/phpredis/archive/php7.zip \
     && docker-php-ext-enable redis
 
 ADD php.ini  /usr/local/etc/php/conf.d/tune.ini
+ADD updatephpfpm.conf  /usr/local/etc/php-fpm.d/updatephpfpm.conf
 
 EXPOSE 9000
 

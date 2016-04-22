@@ -25,7 +25,9 @@ RUN curl -fsSL https://github.com/phpredis/phpredis/archive/php7.zip \
     && docker-php-ext-enable redis
 
 ADD php.ini  /usr/local/etc/php/conf.d/tune.ini
-ADD updatephpfpm.conf  /usr/local/etc/php-fpm.d/updatephpfpm.conf
+RUN sed -i 's/pm.max_children = 5/pm.max_children = 25/g' /usr/local/etc/php-fpm.d/www.conf && \
+    sed -i 's/pm.max_spare_servers = 3/pm.max_spare_servers = 20/g' /usr/local/etc/php-fpm.d/www.conf && \
+    echo "pm.max_requests = 500" >> /usr/local/etc/php-fpm.d/www.conf
 
 EXPOSE 9000
 

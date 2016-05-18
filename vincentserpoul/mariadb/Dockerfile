@@ -26,7 +26,6 @@ RUN chmod u+x /start.sh
 
 # forward request and error logs to docker log collector as mariadb is not the
 # ran process
-RUN ln -sf /dev/stdout /var/log/mysql/ohmaria_general.log
 RUN ln -sf /dev/stdout /var/log/mysql/ohmaria_slow_query.log
 RUN ln -sf /dev/stderr /var/log/mysql/ohmaria_error.log
 

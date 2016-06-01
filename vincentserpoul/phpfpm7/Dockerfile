@@ -1,4 +1,4 @@
-FROM php:7.0.6-fpm
+FROM php:7.0.7-fpm
 MAINTAINER Vincent Serpoul <vincent@serpoul.com>
 
 RUN apt-get update
